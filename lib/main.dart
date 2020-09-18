@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import './counter_cubit.dart';
+import 'page_cubit.dart';
 
-class CounterObserver extends BlocObserver {
+class PageObserver extends BlocObserver {
   @override
   void onChange(Cubit cubit, Change change) {
     print('${cubit.runtimeType} $change');
@@ -13,11 +13,11 @@ class CounterObserver extends BlocObserver {
 }
 
 void main() {
-  Bloc.observer = CounterObserver();
-  runApp(CounterApp());
+  Bloc.observer = PageObserver();
+  runApp(MainApp());
 }
 
-class CounterApp extends StatelessWidget {
+class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -27,7 +27,7 @@ class CounterApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: BlocProvider(
-        create: (_) => CounterCubit(),
+        create: (_) => PageCubit(),
         child: CounterView(),
       ),
     );
@@ -36,18 +36,27 @@ class CounterApp extends StatelessWidget {
 
 /// {@template counter_view}
 /// A [StatelessWidget] which reacts to the provided
-/// [CounterCubit] state and notifies it in response to user input.
+/// [PageCubit] state and notifies it in response to user input.
 /// {@endtemplate}
 class CounterView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return Scaffold(
-      appBar: AppBar(title: const Text('Counter')),
+      appBar: AppBar(title: const Text('Page')),
       body: Center(
-        child: BlocBuilder<CounterCubit, String>(
+        child: BlocBuilder<PageCubit, String>(
           builder: (context, state) {
-            return Text('$state', style: textTheme.headline2);
+            if (state == 'page2') {
+              return Column(
+                children: [
+                  Text('$state', style: textTheme.headline2),
+                  Text('$state', style: textTheme.headline2),
+                ],
+              );
+            } else {
+              Text('$state', style: textTheme.headline2);
+            }
           },
         ),
       ),
@@ -60,31 +69,31 @@ class CounterView extends StatelessWidget {
             child: FloatingActionButton(
               key: const Key('counterView_increment_floatingActionButton'),
               child: const Text('A'),
-              onPressed: () => context.bloc<CounterCubit>().page1(),
+              onPressed: () => context.bloc<PageCubit>().page1(),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FloatingActionButton(
-              key: const Key('counterView_decrement_floatingActionButton'),
+              key: const Key('PageView_decrement_floatingActionButton'),
               child: const Text('B'),
-              onPressed: () => context.bloc<CounterCubit>().page2(),
+              onPressed: () => context.bloc<PageCubit>().page2(),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FloatingActionButton(
-              key: const Key('counterView_decrement_floatingActionButton'),
+              key: const Key('PageView_decrement_floatingActionButton'),
               child: const Text('C'),
-              onPressed: () => context.bloc<CounterCubit>().page3(),
+              onPressed: () => context.bloc<PageCubit>().page3(),
             ),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FloatingActionButton(
-              key: const Key('counterView_decrement_floatingActionButton'),
+              key: const Key('PageView_decrement_floatingActionButton'),
               child: const Text('D'),
-              onPressed: () => context.bloc<CounterCubit>().page4(),
+              onPressed: () => context.bloc<PageCubit>().page4(),
             ),
           ),
         ],
